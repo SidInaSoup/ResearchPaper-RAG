@@ -53,12 +53,7 @@ pip install -r requirements.txt
 
 ### 2. Configure LLM
 
-Copy the example env file and edit it:
-
-```bash
-cp .env.example .env
-```
-### Create a .env file with the below template
+#### Create a .env file with the below template
 
 ```env
 # ── LLM Provider ──────────────────────────────────────────
