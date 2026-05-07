@@ -17,6 +17,7 @@ from src.embedder import embed_texts
 from src.pdf_loader import extract_text_from_pdf
 from src.rag_pipeline import TASKS, answer_query
 from src.vector_store import build_index, index_exists, load_index, save_index
+from src.llm_client import get_config
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
@@ -280,7 +281,7 @@ with st.sidebar:
     top_k = st.slider("Chunks to retrieve", min_value=1, max_value=20, value=5, key="top_k")
 
     st.markdown("---")
-    provider = os.getenv("LLM_PROVIDER", "openai")
+    provider = get_config("LLM_PROVIDER", "openai")
     st.caption(f"LLM Provider: **{provider}**")
 
 # ══════════════════════════════════════════════════════════════════════════════

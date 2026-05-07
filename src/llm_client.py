@@ -11,25 +11,39 @@ Set environment variables:
 
 import json
 import os
-
+import streamlit as st
 import requests
 from openai import OpenAI
 
+def get_config(key: str, default=None) -> str:
+    """Helper to get config from .env or st.secrets"""
+    # First check OS environment variables (loaded from .env)
+    val = os.getenv(key)
+    if val:
+        return val
+    # Then check Streamlit secrets
+    try:
+        val = st.secrets.get(key)
+        if val:
+            return val
+    except Exception:
+        pass
+    return default
 
 def _get_provider() -> str:
-    return os.getenv("LLM_PROVIDER", "openai").lower()
+    return get_config("LLM_PROVIDER", "openai").lower()
 
 
 def _call_openai(prompt: str, system_prompt: str) -> str:
     """Call the OpenAI Chat Completions API."""
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = get_config("OPENAI_API_KEY")
     if not api_key:
         raise ValueError(
-            "OPENAI_API_KEY environment variable is not set. "
-            "Please set it in your .env file or environment."
+            "OPENAI_API_KEY is not set. "
+            "Please set it in your .env file or Streamlit secrets."
         )
 
-    model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+    model = get_config("OPENAI_MODEL", "gpt-4o-mini")
     client = OpenAI(api_key=api_key)
 
     response = client.chat.completions.create(
@@ -46,8 +60,8 @@ def _call_openai(prompt: str, system_prompt: str) -> str:
 
 def _call_ollama(prompt: str, system_prompt: str) -> str:
     """Call an Ollama-compatible local model."""
-    base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-    model = os.getenv("OLLAMA_MODEL", "llama3")
+    base_url = get_config("OLLAMA_BASE_URL", "http://localhost:11434")
+    model = get_config("OLLAMA_MODEL", "llama3")
 
     url = f"{base_url}/api/chat"
     payload = {
