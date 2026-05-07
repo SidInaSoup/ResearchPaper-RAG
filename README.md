@@ -58,6 +58,21 @@ Copy the example env file and edit it:
 ```bash
 cp .env.example .env
 ```
+### Create a .env file with the below template
+
+```env
+# ── LLM Provider ──────────────────────────────────────────
+# "openai" or "ollama"
+LLM_PROVIDER=openai
+
+# ── OpenAI ────────────────────────────────────────────────
+OPENAI_API_KEY=your-openai-api-key-here
+OPENAI_MODEL=gpt-4o-mini
+
+# ── Ollama (optional) ────────────────────────────────────
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3
+```
 
 #### Using OpenAI
 
